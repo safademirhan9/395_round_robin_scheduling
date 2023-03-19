@@ -102,17 +102,17 @@ void display_total_time() {
 }
 
 void display_most_recently_completed_task() {
-    if (completed_tasks_queue == NULL) {
+    if (completed_task_queue == NULL) {
         printf("No tasks completed yet.\n");
         return;
     }
 
-    printf("Task Name: %s\n", completed_tasks_queue->task_name);
-    printf("Initial Runtime: %d\n", completed_tasks_queue->initial_runtime);
-    printf("Completion Time: %d\n", completed_tasks_queue->completion_time);
+    printf("Task Name: %s\n", completed_task_queue->name);
+    printf("Initial Runtime: %d\n", completed_task_queue->runtime);
+    printf("Completion Time: %d\n", completed_task_queue->completion_time);
 }
 
-void dump_completed_tasks_queue(char *file_name) {
+void dump_completed_task_queue(char *file_name) {
     FILE *fp = fopen(file_name, "w");
 
     if (fp == NULL) {
@@ -120,11 +120,11 @@ void dump_completed_tasks_queue(char *file_name) {
         return;
     }
 
-    struct Task *current_task = completed_tasks_queue;
+    struct Task *current_task = completed_task_queue;
     while (current_task != NULL) {
-        fprintf(fp, "Task Name: %s\n", current_task->task_name);
-        fprintf(fp, "Initial Runtime: %d\n", current_task->initial_runtime);
-        fprintf(fp, "Completion Time: %d\n", current_task->completion_time);
+        fprintf(fp, "Task Name: %s\n", current_task->name);
+        fprintf(fp, "Initial Runtime: %d\n", current_task->runtime);
+        // fprintf(fp, "Completion Time: %d\n", current_task->completion_time);
         fprintf(fp, "\n");
 
         current_task = current_task->next;
@@ -133,10 +133,10 @@ void dump_completed_tasks_queue(char *file_name) {
     fclose(fp);
 }
 
-void empty_completed_tasks_queue() {
-    while (completed_tasks_queue != NULL) {
-        struct Task *current_task = completed_tasks_queue;
-        completed_tasks_queue = completed_tasks_queue->next;
+void empty_completed_task_queue() {
+    while (completed_task_queue != NULL) {
+        struct Task *current_task = completed_task_queue;
+        completed_task_queue = completed_task_queue->next;
         free(current_task);
     }
 
@@ -148,8 +148,8 @@ int main() {
     int system_time = 0;
     int idle_time = 0;
 
-    task_list = NULL;
-    completed_tasks_queue = NULL;
+    task_queue;
+    completed_task_queue = NULL;
 
     while (1) {
         printf("\nEnter command: ");
@@ -174,16 +174,16 @@ int main() {
         } else if (strncmp(input, "DCTQ", 4) == 0) {
             char file_name[20];
             sscanf(input + 5, "%s", file_name);
-            dump_completed_tasks_queue(file_name);
+            dump_completed_task_queue(file_name);
         } else if (strncmp(input, "ECTS", 4) == 0) {
-            empty_completed_tasks_queue();
+            empty_completed_task_queue();
         } else if (strncmp(input, "QUIT", 4) == 0) {
             break;
         }
     }
 
     empty_task_list();
-    empty_completed_tasks_queue();
+    empty_completed_task_queue();
 
     return 0;
 }
