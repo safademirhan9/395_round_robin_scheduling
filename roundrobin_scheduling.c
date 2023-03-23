@@ -160,10 +160,10 @@ int main() {
             char task_name[20];
             int runtime;
             sscanf(input + 4, "%s %d", task_name, &runtime);
-            add_task(task_name, runtime);
+            add_task_to_queue(task_name, runtime);
         } else if (strncmp(input, "S", 1) == 0) {
             int k = atoi(input + 2);
-            simulate(k);
+            // simulate(k);
             system_time += k;
         } else if (strncmp(input, "DST", 3) == 0) {
             printf("System time: %d\n", system_time);
@@ -182,8 +182,8 @@ int main() {
         }
     }
 
-    empty_task_list();
-    empty_completed_task_queue();
+    // empty_task_list();
+    // empty_completed_task_queue();
 
     return 0;
 }
